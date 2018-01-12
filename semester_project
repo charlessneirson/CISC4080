@@ -1,0 +1,312 @@
+/*
+	Charles Sneirson
+
+	Semester Project
+
+	Problem: This semester project is to design and implement
+	an algorithm which can sort a given array of integers in ascending order:
+	(a) using four algorithms: 
+		(1) selection sort
+		(2) insertion sort
+		(3) merge sort
+		(4) quick wort
+	(b) compare their run-time
+	This input array is in the form of randomly generated numbers of size at 
+	20, 100, and 200. The language options are C++, Java or Python.
+*/
+
+#include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <ctime>
+#include <ratio>
+#include <chrono>
+using namespace std;
+
+int main(){
+
+	void display(int[], int);
+	void swap(int, int);
+	void selectionSort(int[], int);
+    void insertionSort(int[], int);
+    void merge(int[], int, int, int);
+    void mergeSort(int[], int, int);
+    int partition (int[], int, int);
+    void quickSort(int[], int, int);
+
+    cout << "SEMESTER PROJECT: " << endl << endl;
+
+    cout << "Selection Sort: " << endl << endl;
+
+    int s1 = 20, s2 = 100, s3 = 200;
+    int array1[s1], array2[s2], array3[s3];
+    srand(time(NULL));
+
+    for (int i = 0; i < s1; i++)
+    	array1[i] = rand() % 40 - 20;
+    for (int i = 0; i < s2; i++)
+    	array2[i] = rand() % 200 - 100;
+    for (int i = 0; i < s3; i++)
+    	array3[i] = rand() % 400 - 200;
+
+    cout << "Array 1: ";
+    display(array1, s1);
+    cout << "\nArray 2: ";
+    display(array2, s2);
+    cout << "\nArray 3: ";
+    display(array3, s3);
+
+    std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
+    selectionSort(array1, s1);
+    std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = std::chrono::duration_cast<std::chrono::duration<double> >(t2 - t1);
+    cout << "\nElapsed time of Array 1 Sort: " << elapsed.count() << " seconds" << endl;
+    t1 = std::chrono::high_resolution_clock::now();
+    selectionSort(array2, s2);
+    t2 = std::chrono::high_resolution_clock::now();
+    elapsed = std::chrono::duration_cast<std::chrono::duration<double> >(t2 - t1);
+    cout << "Elapsed time of Array 2 Sort: " << elapsed.count() << " seconds" << endl;
+    t1 = std::chrono::high_resolution_clock::now();
+    selectionSort(array3, s3);
+    t2 = std::chrono::high_resolution_clock::now();
+    elapsed = std::chrono::duration_cast<std::chrono::duration<double> >(t2 - t1);
+    cout << "Elapsed time of Array 3 Sort: " << elapsed.count() << " seconds" << endl;
+
+    cout << "\nSorted Using Selection Sort: " << endl << endl;
+
+    cout << "Array 1: ";
+    display(array1, s1);
+    cout << "\nArray 2: ";
+    display(array2, s2);
+    cout << "\nArray 3: ";
+    display(array3, s3);
+
+    cout << "\nInsertion Sort: " << endl << endl;
+
+    for (int i = 0; i < s1; i++)
+    	array1[i] = rand() % 40 - 20;
+    for (int i = 0; i < s2; i++)
+    	array2[i] = rand() % 200 - 100;
+    for (int i = 0; i < s3; i++)
+    	array3[i] = rand() % 400 - 200;
+
+    cout << "Array 1: ";
+    display(array1, s1);
+    cout << "\nArray 2: ";
+    display(array2, s2);
+    cout << "\nArray 3: ";
+    display(array3, s3);
+
+    t1 = std::chrono::high_resolution_clock::now();
+    insertionSort(array1, s1);
+    t2 = std::chrono::high_resolution_clock::now();
+    elapsed = std::chrono::duration_cast<std::chrono::duration<double> >(t2 - t1);
+    cout << "\nElapsed time of Array 1 Sort: " << elapsed.count() << " seconds" << endl;
+    t1 = std::chrono::high_resolution_clock::now();
+    insertionSort(array2, s2);
+    t2 = std::chrono::high_resolution_clock::now();
+    elapsed = std::chrono::duration_cast<std::chrono::duration<double> >(t2 - t1);
+    cout << "Elapsed time of Array 2 Sort: " << elapsed.count() << " seconds" << endl;
+    t1 = std::chrono::high_resolution_clock::now();
+    insertionSort(array3, s3);
+    t2 = std::chrono::high_resolution_clock::now();
+    elapsed = std::chrono::duration_cast<std::chrono::duration<double> >(t2 - t1);
+    cout << "Elapsed time of Array 3 Sort: " << elapsed.count() << " seconds" << endl;
+
+    cout << "\nSorted Using Insertion Sort: " << endl << endl;
+
+    cout << "Array 1: ";
+    display(array1, s1);
+    cout << "\nArray 2: ";
+    display(array2, s2);
+    cout << "\nArray 3: ";
+    display(array3, s3);
+
+    cout << "\nMerge Sort: " << endl << endl;
+
+    for (int i = 0; i < s1; i++)
+    	array1[i] = rand() % 40 - 20;
+    for (int i = 0; i < s2; i++)
+    	array2[i] = rand() % 200 - 100;
+    for (int i = 0; i < s3; i++)
+    	array3[i] = rand() % 400 - 200;
+
+    cout << "Array 1: ";
+    display(array1, s1);
+    cout << "\nArray 2: ";
+    display(array2, s2);
+    cout << "\nArray 3: ";
+    display(array3, s3);
+
+    t1 = std::chrono::high_resolution_clock::now();
+    mergeSort(array1, 0, s1);
+    t2 = std::chrono::high_resolution_clock::now();
+    elapsed = std::chrono::duration_cast<std::chrono::duration<double> >(t2 - t1);
+    cout << "\nElapsed time of Array 1 Sort: " << elapsed.count() << " seconds" << endl;
+    t1 = std::chrono::high_resolution_clock::now();
+    mergeSort(array2, 0, s2);
+    t2 = std::chrono::high_resolution_clock::now();
+    elapsed = std::chrono::duration_cast<std::chrono::duration<double> >(t2 - t1);
+    cout << "Elapsed time of Array 2 Sort: " << elapsed.count() << " seconds" << endl;
+    t1 = std::chrono::high_resolution_clock::now();
+    mergeSort(array3, 0, s3);
+    t2 = std::chrono::high_resolution_clock::now();
+    elapsed = std::chrono::duration_cast<std::chrono::duration<double> >(t2 - t1);
+    cout << "Elapsed time of Array 3 Sort: " << elapsed.count() << " seconds" << endl;
+
+    cout << "\nSorted Using Merge Sort: " << endl << endl;
+
+    cout << "Array 1: ";
+    display(array1, s1);
+    cout << "\nArray 2: ";
+    display(array2, s2);
+    cout << "\nArray 3: ";
+    display(array3, s3);
+
+    cout << "\nQuick Sort: " << endl << endl;
+
+    for (int i = 0; i < s1; i++)
+    	array1[i] = rand() % 40 - 20;
+    for (int i = 0; i < s2; i++)
+    	array2[i] = rand() % 200 - 100;
+    for (int i = 0; i < s3; i++)
+    	array3[i] = rand() % 400 - 200;
+
+    cout << "Array 1: ";
+    display(array1, s1);
+    cout << "\nArray 2: ";
+    display(array2, s2);
+    cout << "\nArray 3: ";
+    display(array3, s3);
+
+    t1 = std::chrono::high_resolution_clock::now();
+    quickSort(array1, 0, s1);
+    t2 = std::chrono::high_resolution_clock::now();
+    elapsed = std::chrono::duration_cast<std::chrono::duration<double> >(t2 - t1);
+    cout << "\nElapsed time of Array 1 Sort: " << elapsed.count() << " seconds" << endl;
+    t1 = std::chrono::high_resolution_clock::now();
+    quickSort(array2, 0, s2);
+    t2 = std::chrono::high_resolution_clock::now();
+    elapsed = std::chrono::duration_cast<std::chrono::duration<double> >(t2 - t1);
+    cout << "Elapsed time of Array 2 Sort: " << elapsed.count() << " seconds" << endl;
+    t1 = std::chrono::high_resolution_clock::now();
+    quickSort(array3, 0, s3);
+    t2 = std::chrono::high_resolution_clock::now();
+    elapsed = std::chrono::duration_cast<std::chrono::duration<double> >(t2 - t1);
+    cout << "Elapsed time of Array 3 Sort: " << elapsed.count() << " seconds" << endl;
+
+    cout << "\nSorted Using Quick Sort: " << endl << endl;
+
+    cout << "Array 1: ";
+    display(array1, s1);
+    cout << "\nArray 2: ";
+    display(array2, s2);
+    cout << "\nArray 3: ";
+    display(array3, s3);
+
+    cout << "\n*** END OF MAIN ***" << endl;
+}
+
+void display(int arr[], int length){
+    for (int i = 0; i < length; i++)
+            cout << arr[i] << ", ";
+        cout << endl;
+}
+
+void swap(int *x, int *y){
+    int temp = *x;
+    *x = *y;
+    *y = temp;
+}
+ 
+void selectionSort(int arr[], int n){
+    int min;
+    for (int i = 0; i < n-1; i++){
+        min = i;
+        for (int j = i+1; j < n; j++)
+          if (arr[j] < arr[min])
+            min = j;
+        swap(arr[min], arr[i]);
+    }
+}
+
+void insertionSort(int arr[], int length){
+    int i, j, temp;
+    for (i = 1; i < length; i++){
+        j = i;
+        while (j > 0 && arr[j-1] > arr[j]){
+              temp = arr[j];
+              arr[j] = arr[j-1];
+              arr[j-1] = temp;
+              j--;
+        }
+    }
+}
+
+void merge(int arr[], int l, int m, int r){
+    int i, j, k;
+    int n1 = m - l + 1;
+    int n2 =  r - m;
+    int L[n1], R[n2];
+    for (i = 0; i < n1; i++)
+        L[i] = arr[l + i];
+    for (j = 0; j < n2; j++)
+        R[j] = arr[m + 1+ j];
+
+    i = 0; 
+    j = 0; 
+    k = l; 
+    while (i < n1 && j < n2){
+        if (L[i] <= R[j]){
+            arr[k] = L[i];
+            i++;
+        }
+        else {
+            arr[k] = R[j];
+            j++;
+        }
+        k++;
+    }
+    while (i < n1){
+        arr[k] = L[i];
+        i++;
+        k++;
+    }
+    while (j < n2){
+        arr[k] = R[j];
+        j++;
+        k++;
+    }
+}
+
+
+void mergeSort(int arr[], int l, int r){
+    if (l < r){    
+        int m = l+(r-l)/2;
+        mergeSort(arr, l, m);
+        mergeSort(arr, m+1, r);
+        merge(arr, l, m, r);
+    }
+}
+
+int partition (int arr[], int low, int high){
+    int pivot = arr[high];
+    int i = (low - 1);
+    for (int j = low; j <= high- 1; j++){
+        if (arr[j] <= pivot){
+            i++; 
+            swap(arr[i], arr[j]);
+        }
+    }
+    swap(arr[i + 1], arr[high]);
+    return (i + 1);
+}
+
+void quickSort(int arr[], int low, int high){
+    if (low < high){
+        int temp = partition(arr, low, high);
+        quickSort(arr, low, temp - 1);
+        quickSort(arr, temp + 1, high);
+    }
+}
